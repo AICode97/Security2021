@@ -14,12 +14,8 @@ import LoggedIn from "./components/LoggedIn";
 import Home from "./components/Home";
 import Header from "./components/Header";
 import Register from "./components/Register";
-import Account from "./components/Account";
-import Orders from "./components/Orders";
-import Users from "./components/Users";
-import DogInfo from "./components/DogInfo";
-import Statistics from "./components/Statistics";
-import MyDogs from "./components/MyDogs";
+import Flow from "./components/Flow";
+
 
 
 function App() {
@@ -64,18 +60,15 @@ function App() {
           admin={admin}
           logout={logout}
           activeUser={activeUser}
-          Search={DogInfo}
-          MyDogs={MyDogs}
+          Search={Flow}
         />
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
           <Route exact path="/search">
-              <DogInfo />
+              <Flow />
           </Route>
-          
-          
           {!loggedIn ? (
             <Route exact path="/register">
               <Register facade={facade} init={init} />
@@ -86,42 +79,6 @@ function App() {
           {!loggedIn ? (
             <Route exact path="/login">
               <LogIn login={login} init={init} errorMsg={errorMsg} />
-            </Route>
-          ) : (
-            ""
-          )}
-          {loggedIn ? (
-            <Route exact path="/account">
-              <Account facade={facade} activeUser={activeUser} />
-            </Route>
-          ) : (
-            ""
-          )}
-          {loggedIn ? (
-            <Route exact path="/MyDogs">
-              <MyDogs activeUser={activeUser} />
-            </Route>
-          ) : (
-            ""
-          )}
-          {admin ? (
-            <Route exact path="/orders">
-              <Orders />
-            </Route>
-          ) : (
-            ""
-          )}
-          {admin ? (
-            <Route exact path="/users">
-              <Users />
-            </Route>
-          ) : (
-            ""
-          )}
-         
-          {admin ? (
-            <Route exact path="/statistics">
-              <Statistics />
             </Route>
           ) : (
             ""

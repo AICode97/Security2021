@@ -57,18 +57,18 @@ export default function Register({ facade, init }) {
   }
   return (
       <div>
-          <h2>Create A New Profile</h2>
+          <h2>Opret dig her</h2>
      
             <h5>{status}</h5>
 
           <form onSubmit={onSubmit}>
                 Email:
                 <input type="text" id="email" onChange={onChange} />
-                Username:
+                Dit Navn:
                 <input type="text" id="username" onChange={onChange} />
                 Password:
                 <input type="password" id="password" onChange={onChange} />
-                Repeat password:
+                Gentag password:
                 <input type="password" id="password1" onChange={onChange1} />
                 <input type="submit" value="Submit" />
             </form>
