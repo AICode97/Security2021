@@ -27,7 +27,7 @@ export default function LogIn({ login, init, errorMsg }) {
     <h1> Log in </h1>
           <form onChange={onChange}>
             
-                Username:
+                Navn:
                 <input type="text" id="username" onChange={onChange} />
           
            

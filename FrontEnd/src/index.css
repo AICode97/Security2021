@@ -13,27 +13,32 @@ code {
 }
 
 ul.header {
-  list-style-type: none;
-  margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: #333;
+  background-color: rgb(255, 253, 253);
+  float: left;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 ul.header li {
-  float: left;
+  display: block;
+  border-style: ridge;
+  border-width: 1px;
+  width: 200%;
+
 }
 
 ul.header li a {
   display: block;
-  color: white;
+  color: rgb(0, 0, 0);
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+
 }
 ul.header li a:hover:not(.active) {
-  background-color: #111;
+  background-color: rgb(252, 193, 117);
+ 
 }
 .active {
-  background-color: #4caf50;
+  background-color: #ff9100;
 }

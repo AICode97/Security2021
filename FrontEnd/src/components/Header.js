@@ -10,7 +10,7 @@ export default function Header({ loggedIn, admin, logout, activeUser }) {
   return (
     <ul className="header">
       <div>{!admin ? (
-          <li>
+          <li >
             <NavLink exact activeClassName="active" to="/">
               Home
             </NavLink>
@@ -84,7 +84,7 @@ export default function Header({ loggedIn, admin, logout, activeUser }) {
         {
           <li>
             <NavLink activeClassName="active" to="/search">
-              Search
+              Mine Flows
             </NavLink>
           </li>
         

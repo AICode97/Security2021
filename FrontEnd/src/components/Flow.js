@@ -31,12 +31,12 @@ export default function DogInfo() {
   console.log(breed)
   if(breed){
     return (
-      <div>
+      <div >
       <form onSubmit = {onSubmit}>
         <input
           type="text"
           className="search-box"
-          placeholder="Search for..."
+          placeholder="Add noget her i fremtiden"
           onChange={onChange}
         />
         <input type="submit" value="Submit"/>
@@ -59,7 +59,7 @@ export default function DogInfo() {
       <input
         type="text"
         className="search-box"
-        placeholder="Search for..."
+        placeholder="change this later"
         onChange={onChange}
       />
       <input type="submit" value="Submit"/>
