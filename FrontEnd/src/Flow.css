@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .item {
+    display: flex;
+    flex: 1;
+    margin: 0 100px; 
+    box-sizing: border-box;
+    padding: 20px;
+    border: solid;
+    border-style: ridge;
+  }
+
+h1 {
+    text-align: center;
+}
+h2 {
+    font-size: 15px;
+}
+
+p {
+    font-size: 10px;
+}

@@ -1,71 +1,42 @@
 
-import { waitFor } from "@testing-library/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function DogInfo() {
-  const [breed, setbreed] = useState("")
-  const [query, setQuery] = useState("")
-     
-  const onChange = (e) => {
-    const { value } = e.target;
-    setQuery(value);
-    console.log(query)
-  };
-  const onSubmit = (e) => {
-    search(query)
-    
-    e.preventDefault();
-  }
-  const search = (e) => {
-    const url = "http://localhost:8080/jpareststarter/api/dog/" + query;
-    console.log(query)
-    
+import "../Flow.css"
+export default function Flow() {
+  const [flows, setFlows] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
+    const  [status, setStatus] =useState("")
 
-    fetch(url)
-    .then(res => res.json())
-    .then(data => {
-        setbreed(data)
-    })
-    setTimeout(10000000000)
-  };
-  console.log(breed)
-  if(breed){
+    useEffect(() => {
+        fetch("https://jsonplaceholder.typicode.com/todos")
+        .then(flows => flows.json())
+        .then(flows => {
+            setFlows(flows)
+            setIsLoading(false)
+        })
+    }, [])
+
+    if (isLoading) {
+        return <p>Loader</p>
+    }
+
     return (
-      <div >
-      <form onSubmit = {onSubmit}>
-        <input
-          type="text"
-          className="search-box"
-          placeholder="Add noget her i fremtiden"
-          onChange={onChange}
-        />
-        <input type="submit" value="Submit"/>
-        <ul >
+        <div> 
+            <h1> Flows </h1>
+            <div>  {status} </div>
 
-          <li>{breed.img}</li>
-          <li>{breed.breed}</li>
-          <li>{breed.wikipedia}</li>
-          <li>{breed.info}</li>
-          <li>{breed.fact}</li>
-
-  </ul>
-      </form>
-      </div>
-    );
+        <div > 
+            <ul>
+                { flows.map(entry => {
+                    return (
+                        <li class="container">
+                            <p class="item"> Flow Id: {entry.userId} Flow Navn: {entry.id} Beskrivelse Af Flow: {entry.title} </p>
+                            
+                        </li>
+                        )
+                }) }
+            </ul>
+        </div>
+        </div>
+    )
   }
-  else{
-    return(
-    <form onSubmit = {onSubmit}>
-      <input
-        type="text"
-        className="search-box"
-        placeholder="change this later"
-        onChange={onChange}
-      />
-      <input type="submit" value="Submit"/>
-    </form>
-    );
-  }
-}
-
-  

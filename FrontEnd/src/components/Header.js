@@ -1,106 +1,28 @@
-import { NavLink, useHistory } from "react-router-dom";
-export default function Header({ loggedIn, admin, logout, activeUser }) {
-  const history = useHistory();
-
-  function onClick(e) {
-    e.preventDefault();
-    logout();
-    history.push("/");
-  }
+import { NavLink} from "react-router-dom";
+export default function Header() {
   return (
     <ul className="header">
-      <div>{!admin ? (
-          <li >
-            <NavLink exact activeClassName="active" to="/">
-              Home
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {!admin && !loggedIn ? (
-          <li>
-            <NavLink activeClassName="active" to="/register">
-              Register
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {loggedIn && !admin ? (
-          <li>
-            <NavLink activeClassName="active" to="/account">
-              Account
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {loggedIn && !admin ? (
-          <li>
-            <NavLink activeClassName="active" to="/MyDogs">
-              My Dogs
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {admin ? (
-          <li>
-            <NavLink activeClassName="active" to="/orders">
-              Orders
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {admin ? (
-          <li>
-            <NavLink activeClassName="active" to="/users">
-              Users
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {admin ? (
-          <li>
-            <NavLink activeClassName="active" to="/statistics">
-              Statistics
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {!admin && !loggedIn ? (
-          <li>
-            <NavLink activeClassName="active" to="/login">
-              Log in
-            </NavLink>
-          </li>
-        ) : (
-          ""
-        )}
-        {
-          <li>
-            <NavLink activeClassName="active" to="/search">
-              Mine Flows
-            </NavLink>
-          </li>
-        
-        }
-      </div>
-
-      {admin || loggedIn ? (
-        <div>
-          <button className="active" onClick={onClick}>
-            Log out
-          </button>
-            You are logged in as {activeUser}
-        </div>
-      ) : (
-        ""
-      )}
+      
+      <li>
+        <NavLink exact activeClassName="active" to="/">
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/search">
+           Mine Flows
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/Register">
+          Register
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/login">
+          Log in
+        </NavLink>
+      </li>
     </ul>
   );
 }
