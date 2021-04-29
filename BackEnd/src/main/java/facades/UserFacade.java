@@ -62,7 +62,7 @@ public class UserFacade {
         }
     }
 
-    public User addUser(String name, String password, String email) throws AuthenticationException {
+    public User addUser(String name, String password, String email) {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
@@ -122,24 +122,6 @@ public class UserFacade {
         }
 
     }
-    
-    
-    public String getUserAmount() {
-       EntityManager em = emf.createEntityManager();;
-        try {
-            TypedQuery<User> query = em.createQuery ("select u from User u",entities.User.class);
-            List<User> users = query.getResultList();
-            return "[" + users.size() + "]";
-        } finally {
-            em.close();
-    
-        
-    }
-    
-    
-    
-    
    
-}
     
 }

@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,34 +33,40 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false, nullable = false)
     private long id;
    
     @Column(name = "user_email")
     private String email;
-
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "user_name")
     private String userName;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "user_pass")
     private String userPass;
     
-    
+    @Basic(optional = true)
+    @Column(name = "profile_img")
+    private String profileImg;
     
     @JoinTable(name = "user_roles", joinColumns = {
     @JoinColumn(name = "id", referencedColumnName = "user_id")}, inverseJoinColumns = {
     @JoinColumn(name = "user_role", referencedColumnName = "role_name")})
+    
+    
+    
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
     
-    @OneToMany
-    private List<Dog> dogList = new ArrayList<>();
-    
-   
-    
-    
+    @ManyToMany(mappedBy = "user")
+    private List<Flow> flows;
+
 
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {
@@ -89,16 +94,6 @@ public class User implements Serializable {
       
     }
 
-    public List<Dog> getDogList() {
-        return dogList;
-    }
-
-    public void setDogList(List<Dog> dogList) {
-        this.dogList = dogList;
-    }
-    
-    
-    
     public String getEmail() {
         return email;
     }
