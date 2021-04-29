@@ -123,17 +123,7 @@ public class UserResource {
         List<User> allUsers = USER_FACADE.getAllUsers();
         return allUsers;
     }
-    
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("amount")
-    public String amountUsers() {
-        String userAmount = USER_FACADE.getUserAmount();
-        return userAmount;
-    }
-    
-    
+   
     
     }
     

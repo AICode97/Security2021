@@ -33,12 +33,15 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false, nullable = false)
     private long id;
    
     @Column(name = "user_email")
     private String email;
-
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "user_name")
     private String userName;
     
@@ -48,13 +51,21 @@ public class User implements Serializable {
     @Column(name = "user_pass")
     private String userPass;
     
-    
+    @Basic(optional = true)
+    @Column(name = "profile_img")
+    private String profileImg;
     
     @JoinTable(name = "user_roles", joinColumns = {
     @JoinColumn(name = "id", referencedColumnName = "user_id")}, inverseJoinColumns = {
     @JoinColumn(name = "user_role", referencedColumnName = "role_name")})
+    
+    
+    
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
+    
+    @ManyToMany(mappedBy = "user")
+    private List<Flow> flows;
 
 
     public List<String> getRolesAsStrings() {
