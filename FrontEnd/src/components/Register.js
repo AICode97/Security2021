@@ -1,13 +1,15 @@
-import { useEffect, useState, Button, Form } from "react";
+import "../RegisterAndLogin.css";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Row, Container, Col } from "react-bootstrap";
 
-export default function Register({ facade, init }) {
+export default function Register({ facade, init, login }) {
   const [newUser, setNewUser] = useState(init);
   const [status, setStatus] = useState("");
   const [nickName, setNickName] = useState("Stranger");
   const [pass2, setPass2] = useState("");
   const history = useHistory();
+  const [monted, setMonted] = useState(false);
+  const [regiterOk, setRegisterOk] = useState(false);
 
   function onChange(e) {
     const target = e.target;
@@ -30,11 +32,10 @@ export default function Register({ facade, init }) {
     e.preventDefault();
     if (
       pass2.length <= 3 ||
-      newUser.email.length <= 3 ||
       newUser.password.length <= 3 ||
       newUser.username.length <= 3
     ) {
-      setStatus("Username or password must be longer than 3 characters");
+      setStatus("nickname or password to short, try again");
     } else {
       pass2 === newUser.password
         ? facade
@@ -42,37 +43,98 @@ export default function Register({ facade, init }) {
             .then((data) => {
               setStatus(data.msg);
               setNickName(data.username);
+              setMonted(true);
             })
+
             .catch((err) => {
               if (err.status) {
                 err.fullError.then((e) => setStatus(e.message));
               } else {
                 setStatus("Network error has occurred: could not log in");
-                console.log("Network error! Could not log in");
+                console.log("Network error! Could not register");
               }
             })
         : setStatus("passwords did not match");
-      history.push("/login");
     }
   }
-  return (
-      <div>
-          <h2>Opret dig her</h2>
-     
-            <h5>{status}</h5>
 
-          <form onSubmit={onSubmit}>
-                Email:
-                <input type="text" id="email" onChange={onChange} />
-                Dit Navn:
-                <input type="text" id="username" onChange={onChange} />
-                Password:
-                <input type="password" id="password" onChange={onChange} />
-                Gentag password:
-                <input type="password" id="password1" onChange={onChange1} />
-                <input type="submit" value="Submit" />
-            </form>
-        </div>
-    
+  function logIn() {
+    setTimeout(function () {
+      if (monted) {
+        console.log("mounted");
+        console.log(newUser.username + " . " + newUser.password);
+        console.log(status);
+
+        history.push("/login");
+      }
+    }, 3000);
+    return function cleanup() {
+      setMonted(false);
+      setRegisterOk(true);
+    };
+  }
+
+  useEffect(logIn, [monted]);
+
+  return (
+    <div>
+      <div>
+        <h2 className="registerHeader">
+          {" "}
+          <span className="registerLogo">Woodle </span>{" "}
+        </h2>
+      </div>
+      <form className="registerContainer" onSubmit={onSubmit}>
+        {regiterOk ? (
+          <div>
+            <h3>{status}</h3>
+            <div className="loader"></div>
+          </div>
+        ) : (
+          <div>
+            <div className="registerHeader"> Opret dig her</div>
+            <div>
+              <label className="nameField">
+                <input
+                  type="text"
+                  id="username"
+                  className="inputField"
+                  placeholder="Username"
+                  onChange={onChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label className="nameField">
+                <input
+                  type="password"
+                  id="password"
+                  className="inputField"
+                  placeholder="Password"
+                  onChange={onChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label className="nameField">
+                <input
+                  type="password"
+                  id="password1"
+                  className="inputField"
+                  placeholder="Confirm Password"
+                  onChange={onChange1}
+                />
+              </label>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <label className="nameField">{status}</label>
+            </div>
+            <div>
+              <input className="makeButton" type="submit" value="Sign Up" />
+            </div>{" "}
+          </div>
+        )}
+      </form>
+    </div>
   );
 }
