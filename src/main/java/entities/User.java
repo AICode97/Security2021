@@ -138,4 +138,21 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    public List<Flow> getFlows() {
+        return flows;
+    }
+
+    public void setFlows(List<Flow> flows) {
+        this.flows = flows;
+    }
+    
+
 }

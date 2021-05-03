@@ -5,6 +5,7 @@ import dto.FlowDTO;
 import dto.FlowsDTO;
 import entities.Flow;
 import entities.User;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -28,7 +29,7 @@ public class FlowFacade {
         return instance;
     }
     
-    public Flow AddFlow(FlowDTO dto, User user){
+    public Flow AddFlow(FlowDTO dto, List<User> user){
         EntityManager em = emf.createEntityManager();
         
         em.getTransaction().begin();

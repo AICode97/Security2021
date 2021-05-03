@@ -2,6 +2,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,11 +37,20 @@ public class Flow implements Serializable {
     @Column(name = "description")
     private String description;
     
-    @ManyToMany()
-    private User user;
+    @ManyToMany
+    private List<User> user;
 
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
+
+   
     
-    public Flow(User user, String name, String description) {
+    public Flow(List<User> user, String name, String description) {
         this.user = user;
         this.name = name;
         this.description = description;
