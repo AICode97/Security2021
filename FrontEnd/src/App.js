@@ -60,13 +60,13 @@ function App() {
           admin={admin}
           logout={logout}
           activeUser={activeUser}
-          Search={Flow}
+          Flow={Flow}
         />
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/home">
             <Home />
           </Route>
-          <Route exact path="/search">
+          <Route exact path="/flow">
               <Flow />
           </Route>
           {!loggedIn ? (

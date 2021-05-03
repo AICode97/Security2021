@@ -34,9 +34,12 @@ export default function Register({ facade, init, login }) {
       pass2.length <= 3 ||
       newUser.password.length <= 3 ||
       newUser.username.length <= 3
+      
     ) {
+      
       setStatus("nickname or password to short, try again");
     } else {
+      console.log(newUser.username)
       pass2 === newUser.password
         ? facade
             .registerUser(newUser)

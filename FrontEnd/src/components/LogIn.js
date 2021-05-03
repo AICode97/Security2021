@@ -67,7 +67,6 @@ export default function LogIn({
             setMsg(successfulLogin);
           }
         })
-
         .catch((err) => {
           if (err.status) {
             err.fullError.then((e) => setMsg(e.message));

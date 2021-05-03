@@ -8,17 +8,7 @@ function apiFacade() {
     const options = makeOptions("POST", false, {
       ...user,
     });
-
-    
     return fetch(URL + "/api/user", options).then(handleHttpErrors);
-  };
-  const registerDog = (dog) => {
-    const options = makeOptions("POST", false, {
-      ...dog,
-    });
-
-    
-    return fetch(URL + "/api/dog/add", options).then(handleHttpErrors);
   };
  
   const setToken = (token) => {
@@ -27,6 +17,7 @@ function apiFacade() {
   const setActiveUser = (user) => {
     localStorage.setItem("user", user);
   };
+
   const getToken = () => {
     return localStorage.getItem("jwtToken");
   };
@@ -85,6 +76,40 @@ function apiFacade() {
     }
     return opts;
   };
+  function setWithExpiry(key, value, ttl) {
+    const now = new Date();
+
+    // `item` is an object which contains the original value
+    // as well as the time when it's supposed to expire
+    const item = {
+      value: value,
+      expiry: now.getTime() + ttl,
+    };
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+
+  //https://www.sohamkamani.com/blog/javascript-localstorage-with-ttl-expiry/
+  function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key);
+    // if the item doesn't exist, return null
+    if (!itemStr) {
+      return null;
+    }
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    // compare the expiry time of the item with the current time
+    if (now.getTime() > item.expiry) {
+      // If the item is expired, delete the item from storage
+      // and return null
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.value;
+  }
+
+  function getActivUser() {
+    return getWithExpiry("user");
+  }
   return {
     makeOptions,
     setToken,
@@ -97,7 +122,8 @@ function apiFacade() {
     fetchAnyGET,
     fetchNoOptions,
     getActiveUser,
-    registerDog,
+    getActivUser,
+    setWithExpiry
   };
 }
 const facade = apiFacade();
