@@ -136,7 +136,7 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
 
         try {
-            List<User> allUsers = em.createQuery("SELECT u.userName from User u", User.class
+            List<User> allUsers = em.createQuery("SELECT  u.userName from User u", User.class
             )
                     .getResultList();
             return allUsers;

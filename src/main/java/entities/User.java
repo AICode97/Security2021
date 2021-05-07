@@ -3,39 +3,29 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.eclipse.persistence.annotations.UuidGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
 
 @Entity
-
-
- 
+@UuidGenerator(name="uuid2")
 @Table(name = "users")
+
 public class User implements Serializable {
-    
-    
-    
+    @Transient
+    private String secret = "enmegetlangoghemmeligkode";
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", updatable = false, nullable = false)
-    private long id;
-   
+    @GeneratedValue(generator = "uuid2")
+    @Column(name = "user_id", columnDefinition = "VARCHAR(255)")
+    private String id;
+
+
     @Column(name = "user_email")
     private String email;
     
@@ -85,11 +75,12 @@ public class User implements Serializable {
     public boolean verifyPassword(String password) {
         return BCrypt.checkpw(password, this.userPass);
     }
-  
+
+
 
     public User(String userName, String userPass, String email) {
         this.userName = userName;
-        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
+        this.userPass = BCrypt.hashpw(userPass.concat(secret) , BCrypt.gensalt(12));
         this.email = email;
       
     }
@@ -106,11 +97,11 @@ public class User implements Serializable {
         return userName;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
