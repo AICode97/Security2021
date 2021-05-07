@@ -1,9 +1,9 @@
 import "../RegisterAndLogin.css";
 import { useHistory } from "react-router-dom";
+import facade from "../apiFacade";
 import React, { useState, useEffect } from "react";
 
 export default function LogIn({
-  facade,
   init,
   setActivUser,
   setAdmin,

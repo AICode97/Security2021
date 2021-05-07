@@ -1,14 +1,16 @@
 package facades;
 
+import dto.UserDTO;
 import entities.Role;
 import entities.User;
+import errorhandling.InvalidInputException;
+import errorhandling.NotFoundException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
-import utils.EMF_Creator;
-
 
 public class UserFacade {
 
@@ -26,102 +28,122 @@ public class UserFacade {
         return instance;
     }
 
- 
-    
-       public User getVeryfiedUser(String username, String password) throws AuthenticationException {
-        EntityManager em = emf.createEntityManager();
-   
-        try {
-            
-            em.getTransaction().begin();
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userName = :username", User.class);
-            query.setParameter("username", username);
-            User user = query.getSingleResult();
-            user.verifyPassword(password);
-            return user;
-            } finally {
-                em.close();
-            }
-          
-        }
-    
-    
-    public User findUser(Long id) {
-        EntityManager em = emf.createEntityManager();
-        
-        try {
-            em.getTransaction().begin();
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.id = :id ", User.class);
-            query.setParameter("id", id);
-            User user = query.getSingleResult();
-            
-            return user;
-        } 
-        finally {
-            em.close();
-        }
-    }
-
-    public User addUser(String name, String password, String email) {
+    public User getVeryfiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-                user = new User(name, password, email);
-                user.addRole(em.find(Role.class, "user"));
-                em.getTransaction().begin();
-                em.persist(user);
-                em.getTransaction().commit();
-            
+            user = em.find(User.class, username);
+            if (user == null || !user.verifyPassword(password)) {
+                throw new AuthenticationException("Invalid username or password");
+            }
         } finally {
             em.close();
         }
         return user;
     }
-    
-    public User updateUser(User user) {
+
+    public User findUser(String username) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
-        
         try {
-            em.getTransaction().begin();
-            em.merge(user);
-            em.getTransaction().commit();
-            
-            return user;
+            return em.find(User.class, username);
+        } catch (Exception e) {
+            throw new NotFoundException("User " + username + "not found");
         }
-        finally {
+
+    }
+
+    public UserDTO addUser(UserDTO userDTO) throws InvalidInputException {
+        EntityManager em = emf.createEntityManager();
+        String name = null;
+        try {
+            Query query = em.createQuery("SELECT u.userName FROM User u WHERE u.userName = :name");
+            query.setParameter("name", userDTO.getUsername());
+            name = (String) query.getSingleResult();
+        } catch (Exception e) {
+        }
+
+        if (name != null) {
+            throw new InvalidInputException(String.format("The username %s is taken", name));
+        }
+
+        try {
+            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
+
+            for (String role : userDTO.getRoles()) {
+                user.addRole(new Role(role));
+            }
+
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+
+            return new UserDTO(user);
+
+        } finally {
             em.close();
         }
     }
+
+    /*public User updateUser(User user) {
+    EntityManager em = emf.createEntityManager();
+    
+    try {
+    em.getTransaction().begin();
+    em.merge(user);
+    em.getTransaction().commit();
+    
+    return user;
+    }
     
     
+    */
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     public User deleteUser(Long userId) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.id = :id ", User.class);
-            query.setParameter("id", userId);
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.id = :id ", User.class
+            );
+            query.setParameter(
+                    "id", userId);
             User p = query.getSingleResult();
+
             em.remove(p);
-            em.getTransaction().commit();
-            return p; 
-        }
-        finally{
+
+            em.getTransaction()
+                    .commit();
+            return p;
+        } finally {
             em.close();
         }
-        
+
     }
-     
+
     public List<User> getAllUsers() {
         EntityManager em = emf.createEntityManager();
+
         try {
-            List<User> allUsers = em.createQuery("SELECT u.userName from User u", User.class)
-            .getResultList();
+            List<User> allUsers = em.createQuery("SELECT u.userName from User u", User.class
+            )
+                    .getResultList();
             return allUsers;
         } finally {
             em.close();
         }
 
     }
-   
-    
+
 }
