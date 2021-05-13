@@ -42,15 +42,31 @@ public class UserFacade {
         return user;
     }
 
-    public User findUser(String username) throws NotFoundException {
+    public User findUser(String email) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(User.class, username);
+            return em.find(User.class, email);
         } catch (Exception e) {
-            throw new NotFoundException("User " + username + "not found");
+            throw new NotFoundException("User " + email + "not found");
         }
-
     }
+    public String getUserByEmail(String email) {
+      EntityManager em = emf.createEntityManager();
+      String result = null; 
+      try{
+          em.getTransaction().begin();
+          Query query = em.createQuery("SELECT s.userName FROM User s WHERE s.email =:email", User.class)
+          .setParameter("email", email);
+          result = (String) query.getSingleResult();
+          em.getTransaction().commit();
+          
+      }finally{
+          em.close();
+      }
+        return result;
+    }
+
+
 
     public UserDTO addUser(UserDTO userDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();

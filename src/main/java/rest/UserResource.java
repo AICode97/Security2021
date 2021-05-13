@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import dto.UserDTO;
 import entities.Role;
 import entities.User;
@@ -11,6 +12,8 @@ import errorhandling.API_Exception;
 import errorhandling.InvalidInputException;
 import errorhandling.NotFoundException;
 import facades.UserFacade;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -22,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import security.errorhandling.AuthenticationException;
@@ -119,22 +123,29 @@ public class UserResource {
 
 
 // Virker ikke, ved ikke hvorfor, den kan ikke finde endpointet, må blive kigget på senere 
-    @Path("test")
+   /* @Path("/{email}")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User findUser(String name) throws API_Exception {
         try {
             JsonObject json = JsonParser.parseString(name).getAsJsonObject();
-            String userName = json.get("user_name").getAsString();
-            User user = USER_FACADE.findUser(userName);
+            String email = json.get("user_email").getAsString();
+            User user = USER_FACADE.findUser(email);
             return user;
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
-    }
+    }*/
 
+   @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{email}")
+    public String getUser(@PathParam("email") String email) throws IOException, MalformedURLException, ParseException {
+        
+        return GSON.toJson(USER_FACADE.getUserByEmail(email));
+    } 
 }
     
     
