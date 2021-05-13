@@ -53,7 +53,7 @@ public class UserResource {
         List<String> roles = new ArrayList();
         roles.add("user");
         UserDTO userDTO = GSON.fromJson(user, UserDTO.class);
-        userDTO = new UserDTO(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), roles);
+        userDTO = new UserDTO(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), userDTO.getRoleId());
         userDTO = USER_FACADE.addUser(userDTO);
 
         return GSON.toJson(userDTO);
@@ -121,7 +121,7 @@ public class UserResource {
         return allUsers;
     }
 
-    
+
 
    @GET
     @Produces(MediaType.APPLICATION_JSON)

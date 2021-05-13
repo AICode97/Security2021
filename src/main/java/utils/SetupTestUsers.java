@@ -16,9 +16,9 @@ public class SetupTestUsers {
     
   
 
-    User user = new User("BrianPedersen1972", "detheltBrian","BrianPedersen@gmail.com");
-    User admin = new User("TrixForKidz", "sillyRabbit","TrixForKidz@business.com");
-    User both = new User("The Lich King", "uhadeterkoldt","nulgrader4thewin@gmail.com");
+    User user = new User("BrianPedersen1972", "detheltBrian","BrianPedersen@gmail.com",  1);
+    User admin = new User("TrixForKidz", "sillyRabbit","TrixForKidz@business.com", 1);
+    User both = new User("The Lich King", "uhadeterkoldt","nulgrader4thewin@gmail.com", 2);
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
@@ -28,10 +28,6 @@ public class SetupTestUsers {
     //em.createQuery("DELETE FROM User").executeUpdate();
     Role userRole = new Role("user");
     Role adminRole = new Role("admin");
-    user.addRole(userRole);
-    admin.addRole(adminRole);
-    both.addRole(userRole);
-    both.addRole(adminRole);
     em.persist(userRole);
     em.persist(adminRole);
     em.persist(user);

@@ -76,11 +76,9 @@ public class UserFacade {
         }
 
         try {
-            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
+            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(), userDTO.getRoleId());
 
-            for (String role : userDTO.getRoles()) {
-                user.addRole(new Role(role));
-            }
+
 
             em.getTransaction().begin();
             em.persist(user);
@@ -92,6 +90,8 @@ public class UserFacade {
             em.close();
         }
     }
+
+
 
     /*public User updateUser(User user) {
     EntityManager em = emf.createEntityManager();

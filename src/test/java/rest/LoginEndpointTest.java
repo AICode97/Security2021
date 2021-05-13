@@ -71,13 +71,12 @@ public class LoginEndpointTest {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            User user = new User("user", "test","email");
-            user.addRole(userRole);
-            User admin = new User("admin", "test","email");
-            admin.addRole(adminRole);
-            User both = new User("user_admin", "test","email");
-            both.addRole(userRole);
-            both.addRole(adminRole);
+            User user = new User("user", "test","email" ,1);
+
+            User admin = new User("admin", "test","email", 1);
+
+            User both = new User("user_admin", "test","email" ,2);
+
             em.persist(userRole);
             em.persist(adminRole);
             em.persist(user);

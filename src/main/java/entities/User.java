@@ -44,30 +44,13 @@ public class User implements Serializable {
     @Basic(optional = true)
     @Column(name = "profileImg")
     private String profileImg;
-    
-    @JoinTable(name = "userRoles", joinColumns = {
-    @JoinColumn(name = "id", referencedColumnName = "userId")}, inverseJoinColumns = {
-    @JoinColumn(name = "userRole", referencedColumnName = "roleId")})
-    
-    
-    
-    @ManyToMany
-    private List<Role> roleList = new ArrayList<>();
-    
-    @ManyToMany(mappedBy = "user")
-    private List<Flow> flows;
+
+    @Basic(optional = false)
+    @Column(name = "roleId")
+    private int roleId;
 
 
-    public List<String> getRolesAsStrings() {
-        if (roleList.isEmpty()) {
-            return null;
-        }
-        List<String> rolesAsStrings = new ArrayList<>();
-        roleList.forEach((role) -> {
-            rolesAsStrings.add(role.getRoleName());
-        });
-        return rolesAsStrings;
-    }
+
     public User() {
     }
 
@@ -78,11 +61,11 @@ public class User implements Serializable {
 
 
 
-    public User(String userName, String userPass, String email) {
+    public User(String userName, String userPass, String email, int roleId) {
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass.concat(secret) , BCrypt.gensalt(12));
         this.email = email;
-      
+        this.roleId = roleId;
     }
 
     public String getEmail() {
@@ -117,33 +100,11 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
     }
 
-    public List<Role> getRoleList() {
-        return roleList;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
-
-    public void addRole(Role userRole) {
-        roleList.add(userRole);
-    }
-
-    public String getProfileImg() {
-        return profileImg;
-    }
-
-    public void setProfileImg(String profileImg) {
-        this.profileImg = profileImg;
-    }
-
-    public List<Flow> getFlows() {
-        return flows;
-    }
-
-    public void setFlows(List<Flow> flows) {
-        this.flows = flows;
-    }
-    
-
 }
