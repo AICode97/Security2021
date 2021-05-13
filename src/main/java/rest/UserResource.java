@@ -121,23 +121,7 @@ public class UserResource {
         return allUsers;
     }
 
-
-// Virker ikke, ved ikke hvorfor, den kan ikke finde endpointet, må blive kigget på senere 
-   /* @Path("/{email}")
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public User findUser(String name) throws API_Exception {
-        try {
-            JsonObject json = JsonParser.parseString(name).getAsJsonObject();
-            String email = json.get("user_email").getAsString();
-            User user = USER_FACADE.findUser(email);
-            return user;
-        } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Suplied", 400, e);
-        }
-
-    }*/
+    
 
    @GET
     @Produces(MediaType.APPLICATION_JSON)

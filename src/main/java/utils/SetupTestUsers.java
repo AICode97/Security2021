@@ -18,7 +18,7 @@ public class SetupTestUsers {
 
     User user = new User("BrianPedersen1972", "detheltBrian","BrianPedersen@gmail.com");
     User admin = new User("TrixForKidz", "sillyRabbit","TrixForKidz@business.com");
-    User both = new User("The Lich King", "uhadeterkoldt","nulgrader4thewin");
+    User both = new User("The Lich King", "uhadeterkoldt","nulgrader4thewin@gmail.com");
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");

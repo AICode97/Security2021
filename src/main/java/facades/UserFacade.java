@@ -42,14 +42,7 @@ public class UserFacade {
         return user;
     }
 
-    public User findUser(String email) throws NotFoundException {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.find(User.class, email);
-        } catch (Exception e) {
-            throw new NotFoundException("User " + email + "not found");
-        }
-    }
+
     public String getUserByEmail(String email) {
       EntityManager em = emf.createEntityManager();
       String result = null; 

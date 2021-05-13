@@ -22,32 +22,32 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_id", columnDefinition = "VARCHAR(255)")
+    @Column(name = "userId", columnDefinition = "VARCHAR(255)")
     private String id;
 
 
-    @Column(name = "user_email")
+    @Column(name = "userEmail")
     private String email;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
-    @Column(name = "user_name")
+    @Column(name = "userName")
     private String userName;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "user_pass")
+    @Column(name = "userPassword")
     private String userPass;
     
     @Basic(optional = true)
-    @Column(name = "profile_img")
+    @Column(name = "profileImg")
     private String profileImg;
     
-    @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "id", referencedColumnName = "user_id")}, inverseJoinColumns = {
-    @JoinColumn(name = "user_role", referencedColumnName = "role_name")})
+    @JoinTable(name = "userRoles", joinColumns = {
+    @JoinColumn(name = "id", referencedColumnName = "userId")}, inverseJoinColumns = {
+    @JoinColumn(name = "userRole", referencedColumnName = "roleId")})
     
     
     
