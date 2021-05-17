@@ -22,35 +22,52 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid2")
-    @Column(name = "userId", columnDefinition = "VARCHAR(255)")
+    @Column(name = "user_id", columnDefinition = "VARCHAR(255)")
     private String id;
 
 
-    @Column(name = "email")
+    @Column(name = "user_email")
     private String email;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
-    @Column(name = "userName")
+    @Column(name = "user_name")
     private String userName;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "userPassword")
+    @Column(name = "user_pass")
     private String userPass;
     
     @Basic(optional = true)
-    @Column(name = "profileImg")
+    @Column(name = "profile_img")
     private String profileImg;
+    
+    @JoinTable(name = "user_roles", joinColumns = {
+    @JoinColumn(name = "id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+    @JoinColumn(name = "user_role", referencedColumnName = "role_name")})
+    
+    
+    
+    @ManyToMany
+    private List<Role> roleList = new ArrayList<>();
+    
+    @ManyToMany(mappedBy = "user")
+    private List<Flow> flows;
 
-    @Basic(optional = false)
-    @Column(name = "roleId")
-    private int roleId;
 
-
-
+    public List<String> getRolesAsStrings() {
+        if (roleList.isEmpty()) {
+            return null;
+        }
+        List<String> rolesAsStrings = new ArrayList<>();
+        roleList.forEach((role) -> {
+            rolesAsStrings.add(role.getRoleName());
+        });
+        return rolesAsStrings;
+    }
     public User() {
     }
 
@@ -61,11 +78,11 @@ public class User implements Serializable {
 
 
 
-    public User(String userName, String userPass, String email, int roleId) {
+    public User(String userName, String userPass, String email) {
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass.concat(secret) , BCrypt.gensalt(12));
         this.email = email;
-        this.roleId = roleId;
+      
     }
 
     public String getEmail() {
@@ -100,11 +117,33 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
     }
 
-    public int getRoleId() {
-        return roleId;
+    public List<Role> getRoleList() {
+        return roleList;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
+
+    public void addRole(Role userRole) {
+        roleList.add(userRole);
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    public List<Flow> getFlows() {
+        return flows;
+    }
+
+    public void setFlows(List<Flow> flows) {
+        this.flows = flows;
+    }
+    
+
 }

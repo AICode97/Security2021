@@ -13,24 +13,22 @@ public class UserDTO {
     private String username; 
     private String password;
     private String email;
-    private int roleId;
-
+    private List<String> roles;
 
     
 
-    public UserDTO(String username, String password, String email, int roleId) {
+    public UserDTO(String username, String password, String email,  List<String> roles) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.roleId = roleId;
+        this.roles = roles;
     }
     
     public UserDTO (User user) {
         this.username = user.getUserName();
         this.email = user.getEmail();
         this.password = user.getUserPass();
-        this.roleId = user.getRoleId();
-
+        this.roles = user.getRolesAsStrings();
         
     }
 
@@ -58,11 +56,14 @@ public class UserDTO {
         this.password = password;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
+    
+    
+    
 }

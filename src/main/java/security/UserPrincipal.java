@@ -1,4 +1,4 @@
-/* package security;
+ package security;
 
 import entities.User;
 import java.security.Principal;
@@ -32,4 +32,3 @@ public class UserPrincipal implements Principal {
     return this.roles.contains(role);
   }
 }
-*/

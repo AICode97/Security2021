@@ -1,4 +1,4 @@
-/*package security;
+package security;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
@@ -92,5 +92,5 @@ public class JWTAuthenticationFilter implements ContainerRequestFilter {
  }
 }
 
-*/
+
 
