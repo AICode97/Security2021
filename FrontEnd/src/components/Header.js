@@ -1,91 +1,42 @@
-import { NavLink, useHistory} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink} from "react-router-dom";
+import UserService from "../services/UserService";
 
-  export default function Header({
-    loggedIn,
-    admin,
-    logout,
-    fquantity,
-    rquantity,
-    activUser,
-  }) {
-    const history = useHistory();
-  
-    function onClick(e) {
-      e.preventDefault();
-      logout();
-      history.push("/");
-    }
+const userService = new UserService()
+
+export default function Header(props) {
+  const isAdmin = props.user && props.user.roles.includes('admin')
+  const isUser = props.user && props.user.roles.includes('user')
+
   return (
-  
     <ul className="header">
-      {!admin ? (
-        <li>
-          <NavLink activeClassName="active" to="/home">
-            Home
+      { props.user == null && <li>
+        <NavLink exact activeClassName="active" to="/login">
+          Log in
+        </NavLink>
+      </li> }
+      { props.user && <li>
+        <NavLink exact activeClassName="active" to="/logout">
+          Logout
+        </NavLink>
+      </li> }
+      { props.user == null && <li>
+        <NavLink activeClassName="active" to="/register">
+          Register
+        </NavLink>
+      </li> }
+      {
+        isUser && <li>
+          <NavLink activeClassName="active" to="/user">
+            User
           </NavLink>
         </li>
-      ) : (
-        ""
-      )}
-      {!admin && !loggedIn ? (
-        <li>
-          <NavLink activeClassName="active" to="/register">
-            Register
-          </NavLink>
-        </li>
-      ) : (
-        ""
-      )}
-      {!admin && !loggedIn ? (
-        <li>
-          <NavLink activeClassName="active" to="/login">
-            Log in
-          </NavLink>
-        </li>
-      ) : (
-        ""
-      )}
-
-      {loggedIn && !admin ? (
-        <li>
-          <NavLink activeClassName="active" to="/account">
-            Profil
-          </NavLink>
-        </li>
-      ) : (
-        ""
-      )}
-
-      {admin ? (
-        <li>
-          <NavLink activeClassName="active" to="/users">
-            Students
-          </NavLink>
-        </li>
-      ) : (
-        ""
-      )}
-
-      {!admin ? (
-        <li>
-          <NavLink activeClassName="active" to="/flow">
-            Flows
-          </NavLink>
-        </li>
-      ) : (
-        ""
-      )}
-     
-      {admin || loggedIn ? (
-        <li>
-          <button onClick={onClick}>
-            Log out
-          </button>
-        </li>
-      ) : (
-        ""
-      )}
-      <div style={{ color: "white" }}> {activUser}</div>
+      }
+      { isAdmin && <li>
+        <NavLink activeClassName="active" to="/admin">
+          Admin
+        </NavLink>
+      </li>}
     </ul>
   );
 }
