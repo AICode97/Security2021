@@ -4,8 +4,8 @@ package facades;
 import dto.FlowDTO;
 import dto.FlowsDTO;
 import entities.Flow;
-import entities.User;
-import java.util.List;
+import security.errorhandling.AuthenticationException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -28,14 +28,19 @@ public class FlowFacade {
         }
         return instance;
     }
-    
-    public Flow AddFlow(FlowDTO dto, List<User> user){
+
+    public Flow addFlow(String name, String description) {
         EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
-        Flow flow = new Flow(user, dto.getName(), dto.getDescription());
-        em.persist(flow);
-        em.getTransaction().commit();
+        Flow flow;
+        try {
+            flow = new Flow(name, description);
+            em.getTransaction().begin();
+            em.persist(flow);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
         return flow;
     }
     

@@ -1,6 +1,8 @@
 
 package entities;
 
+import org.eclipse.persistence.annotations.UuidGenerator;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -17,15 +19,16 @@ import javax.validation.constraints.Size;
  * @author danie
  */
 @Entity
+@UuidGenerator(name="uuid2")
 @Table(name = "flow")
 public class Flow implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flow_id", updatable = false, nullable = false)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @Column(name = "flowId", columnDefinition = "VARCHAR(255)")
+    private String id;
     
     
     @Size(min = 1, max = 40)
@@ -37,33 +40,21 @@ public class Flow implements Serializable {
     @Column(name = "description")
     private String description;
     
-    @ManyToMany
-    private List<User> user;
 
-    public List<User> getUser() {
-        return user;
-    }
-
-    public void setUser(List<User> user) {
-        this.user = user;
-    }
-
-   
     
-    public Flow(List<User> user, String name, String description) {
-        this.user = user;
+    public Flow(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     public Flow() {
     }
-    
-    public Long getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

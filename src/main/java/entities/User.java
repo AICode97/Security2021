@@ -16,37 +16,33 @@ import org.mindrot.jbcrypt.BCrypt;
 @Table(name = "users")
 
 public class User implements Serializable {
-    @Transient
-    private String secret = "enmegetlangoghemmeligkode";
+
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid2")
-    @Column(name = "user_id", columnDefinition = "VARCHAR(255)")
+    @Column(name = "userId", columnDefinition = "VARCHAR(255)" )
     private String id;
 
 
-    @Column(name = "user_email")
+    @Column( name = "useremail", unique = true)
     private String email;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username", unique = true)
+    private String username;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "user_pass")
-    private String userPass;
-    
-    @Basic(optional = true)
-    @Column(name = "profile_img")
-    private String profileImg;
+    @Column(name = "password")
+    private String password;
+
     
     @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+    @JoinColumn(name = "id", referencedColumnName = "userId")}, inverseJoinColumns = {
     @JoinColumn(name = "user_role", referencedColumnName = "role_name")})
     
     
@@ -54,8 +50,6 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
     
-    @ManyToMany(mappedBy = "user")
-    private List<Flow> flows;
 
 
     public List<String> getRolesAsStrings() {
@@ -72,15 +66,15 @@ public class User implements Serializable {
     }
 
     //TODO Change when password is hashed
-    public boolean verifyPassword(String password) {
-        return BCrypt.checkpw(password, this.userPass);
+    public boolean verifyPassword(String userPass) {
+        return BCrypt.checkpw(userPass, this.password);
     }
 
 
 
-    public User(String userName, String userPass, String email) {
-        this.userName = userName;
-        this.userPass = BCrypt.hashpw(userPass.concat(secret) , BCrypt.gensalt(12));
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = BCrypt.hashpw(password , BCrypt.gensalt(12));
         this.email = email;
       
     }
@@ -94,7 +88,7 @@ public class User implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public String getId() {
@@ -106,15 +100,15 @@ public class User implements Serializable {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public String getUserPass() {
-        return this.userPass;
+        return this.password;
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
+        this.password = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
     }
 
     public List<Role> getRoleList() {
@@ -129,21 +123,9 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
-    public String getProfileImg() {
-        return profileImg;
-    }
 
-    public void setProfileImg(String profileImg) {
-        this.profileImg = profileImg;
-    }
 
-    public List<Flow> getFlows() {
-        return flows;
-    }
 
-    public void setFlows(List<Flow> flows) {
-        this.flows = flows;
-    }
     
 
 }

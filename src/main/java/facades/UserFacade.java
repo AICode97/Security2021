@@ -4,7 +4,8 @@ import dto.UserDTO;
 import entities.Role;
 import entities.User;
 import errorhandling.InvalidInputException;
-import errorhandling.NotFoundException;
+
+import java.rmi.UnexpectedException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,11 +29,35 @@ public class UserFacade {
         return instance;
     }
 
-    public User getVeryfiedUser(String username, String password) throws AuthenticationException {
+    public User addUser(String username, String password, String email) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-            user = em.find(User.class, username);
+
+            user = new User(username, password, email);
+            Role userRole = new Role("user");
+            user.addRole(userRole);
+
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+        return user;
+    }
+
+
+
+    public User getVerifiedUser(String username, String password) throws AuthenticationException {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        try {
+            Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+            query.setParameter("username", username);
+
+            user = (User) query.getSingleResult();
             if (user == null || !user.verifyPassword(password)) {
                 throw new AuthenticationException("Invalid username or password");
             }
@@ -42,67 +67,31 @@ public class UserFacade {
         return user;
     }
 
-    public String getUserByEmail(String email) {
+
+
+    public User getUserByUsername(String username) throws UnexpectedException {
         EntityManager em = emf.createEntityManager();
-        String result = null;
+        User user;
         try {
-            em.getTransaction().begin();
-            Query query = em.createQuery("SELECT s.userName FROM User s WHERE s.email =:email", User.class)
-                    .setParameter("email", email);
-            result = (String) query.getSingleResult();
-            em.getTransaction().commit();
+            Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+            query.setParameter("username", username);
 
-        } finally {
-            em.close();
-        }
-        return result;
-    }
-
-     public UserDTO addUser(UserDTO userDTO) throws InvalidInputException {
-        EntityManager em = emf.createEntityManager();
-        String name = null;
-        try {
-            Query query = em.createQuery("SELECT u.userName FROM User u WHERE u.userName = :name");
-            query.setParameter("name", userDTO.getUsername());
-            name = (String) query.getSingleResult();
-        } catch (Exception e) {
-        }
-
-        if (name != null) {
-            throw new InvalidInputException(String.format("The username %s is taken", name));
-        }
-
-        try {
-            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
-
-            for (String role : userDTO.getRoles()) {
-                user.addRole(new Role(role));
+            user = (User) query.getSingleResult();
+            if (user == null) {
+                throw new UnexpectedException("Invalid username");
             }
-
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
-
-            return new UserDTO(user);
-
         } finally {
             em.close();
         }
+        return user;
     }
 
-    /*public User updateUser(User user) {
-    EntityManager em = emf.createEntityManager();
-    
-    try {
-    em.getTransaction().begin();
-    em.merge(user);
-    em.getTransaction().commit();
-    
-    return user;
-    }
-    
-    
-     */
+
+
+
+
+
+
     public User deleteUser(Long userId) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -127,7 +116,7 @@ public class UserFacade {
     public List<User> getAllUsers() {
         EntityManager em = emf.createEntityManager();
         try {
-            List<User> allUsers = em.createQuery("SELECT  u.userName from User u", User.class
+            List<User> allUsers = em.createQuery("SELECT  u.email from User u", User.class
             )
                     .getResultList();
             return allUsers;
