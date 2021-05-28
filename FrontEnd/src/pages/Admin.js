@@ -68,7 +68,7 @@ export default function Admin(props) {
             
             await flowService.makeFlow(data)
         } catch (_) {
-            setError("Could not create flow")
+            setError("Could not create flow, maybe it already exists")
         }
     }
 

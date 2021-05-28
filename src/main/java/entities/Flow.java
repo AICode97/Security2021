@@ -32,7 +32,7 @@ public class Flow implements Serializable {
     
     
     @Size(min = 1, max = 40)
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     
     

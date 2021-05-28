@@ -4,29 +4,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.nimbusds.jose.shaded.json.parser.ParseException;
 import dto.UserDTO;
-import entities.Role;
 import entities.User;
 import errorhandling.API_Exception;
-import errorhandling.InvalidInputException;
-import errorhandling.NotFoundException;
 import facades.UserFacade;
-import java.io.IOException;
-import java.net.MalformedURLException;
+
 import java.rmi.UnexpectedException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
+import javax.json.Json;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import java.util.regex.*;
 
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
@@ -51,13 +45,29 @@ public class UserResource {
     public Response addUser(String jsonString) throws API_Exception {
         try {
 
+
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             String username = json.get("username").getAsString();
             String password = json.get("password").getAsString();
             String email = json.get("email").getAsString();
 
+            JsonObject checker = new JsonObject();
 
-            User user = USER_FACADE.addUser(username, password,email);
+         
+
+           boolean testUsername = Pattern.matches("^[a-åA-Å0-9!@#\\$%\\^\\&*\\)\\(+=._-]{6,}$", username.toLowerCase());
+            if( testUsername != true){
+                checker.addProperty("msg", "Invalid Username: Must not contain any foreign characters");
+                return Response.ok(new Gson().toJson(checker)).build();
+            }
+
+            boolean testEmail = Pattern.matches("^[a-åA-Å-0-9@.]*${0,30}", email.toLowerCase());
+            if( testEmail != true){
+                checker.addProperty("msg", "Invalid Email: Must not contain any special characters");
+                return Response.ok(new Gson().toJson(checker)).build();
+            }
+
+            User user = USER_FACADE.addUser(username, password,email);                   
 
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("username", username);
@@ -69,13 +79,6 @@ public class UserResource {
         }
     }
 
-
-
-    // GET /users => find all users
-    // GET /users/:id => find user by supplied id
-    // POST /users => create new user
-    // DELETE /users/:id => delete user by supplied id
-    // PUT /users/:id => update user by supplied id, send json object with updates
 
     @Path("user")
     @GET

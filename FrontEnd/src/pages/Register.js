@@ -20,13 +20,13 @@ const commonPasswordService = new CommonPasswordService()
 
 // Den tjekker at det som du har tastet ind er en gyldig email. Dette kan dog bypasses, bedste løsning ville være at sende en email til personen.
 function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^[a-åA-Å-0-9@.]*$/;
     return re.test(String(email).toLowerCase());
 }
 
-// Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Z, og gør at dit username skal være mindst 6 tegn, also no spaces
+// Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Å, og gør at dit username skal være mindst 6 tegn, also no spaces
 function validateUsername(username) {
-    const regex = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{6,}$/;
+    const regex = /^[a-åA-Å0-9!@#\$%\^\&*\)\(+=._-]{6,}$/;
     return regex.test(String(username).toLowerCase());
 }
 
@@ -36,7 +36,7 @@ export default function Register(props) {
     const [isRegistered, setIsRegistered] = useState(false)
     const [words, setWords] = useState([])
 
-    const isDisabled = data.password.length < 6 || !validateEmail(data.email) || !validateUsername(data.username)
+    const isDisabled = data.password.length < 6 || !validateEmail(data.email) || !validateUsername(data.username) || data.email.length <= 0
 
     useEffect(async() => {
         const words = await commonPasswordService.fetchCommonPasswords()

@@ -20,7 +20,7 @@ export default function Login(props) {
     const [isAdmin, setIsAdmin] = useState(false)
     const [isAllowed, setIsAllowed] = useState(bruteForceService.isAllowed())
 
-    // Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Z, og gør at dit username skal være mindst 6 tegn
+    // Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Z, og gør at dit username skal være mindst 6 tegn, also no spaces
 function validateUsername(username) {
     const regex = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{6,}$/;
     return regex.test(String(username).toLowerCase());
