@@ -17,7 +17,11 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class User implements Serializable {
 
-
+    
+    @Transient
+    private String secretKey = "TaiwanErEtLand";
+    
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -65,16 +69,20 @@ public class User implements Serializable {
     public User() {
     }
 
+    
+    
+    
     //TODO Change when password is hashed
     public boolean verifyPassword(String userPass) {
-        return BCrypt.checkpw(userPass, this.password);
+        return BCrypt.checkpw(userPass.concat(secretKey), this.password);
+        
     }
 
 
 
     public User(String username, String password, String email) {
         this.username = username;
-        this.password = BCrypt.hashpw(password , BCrypt.gensalt(12));
+        this.password = BCrypt.hashpw(password.concat(secretKey) , BCrypt.gensalt(12));
         this.email = email;
       
     }
