@@ -60,7 +60,13 @@ public class UserResource {
                 checker.addProperty("msg", "Invalid Username: Must not contain any foreign characters");
                 return Response.ok(new Gson().toJson(checker)).build();
             }
-
+            
+            if (password.length() < 12 || password.length() > 128) {
+                checker.addProperty("msg", "Invalid password length");
+                return Response.ok(new Gson().toJson(checker)).build();
+            }
+                
+           
             boolean testEmail = Pattern.matches("^[a-åA-Å-0-9@.]*${0,30}", email.toLowerCase());
             if( testEmail != true){
                 checker.addProperty("msg", "Invalid Email: Must not contain any special characters");

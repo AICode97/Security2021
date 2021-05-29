@@ -24,7 +24,7 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-// Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Å, og gør at dit username skal være mindst 6 tegn, also no spaces
+// Den gør så du kun kan bruge .!@#$%^&*()_+-= og A-Å, og gør at dit username skal være mindst 12 tegn, also no spaces
 function validateUsername(username) {
     const regex = /^[a-åA-Å0-9!@#\$%\^\&*\)\(+=._-]{6,}$/;
     return regex.test(String(username).toLowerCase());
@@ -36,7 +36,7 @@ export default function Register(props) {
     const [isRegistered, setIsRegistered] = useState(false)
     const [words, setWords] = useState([])
 
-    const isDisabled = data.password.length < 6 || !validateEmail(data.email) || !validateUsername(data.username) || data.email.length <= 0
+    const isDisabled = data.password.length < 12 || data.password.length > 128 || !validateEmail(data.email) || !validateUsername(data.username) || data.email.length <= 0
 
     useEffect(async() => {
         const words = await commonPasswordService.fetchCommonPasswords()
