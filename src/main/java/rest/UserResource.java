@@ -55,7 +55,7 @@ public class UserResource {
 
          
 
-           boolean testUsername = Pattern.matches("^[a-åA-Å0-9!@#\\$%\\^\\&*\\)\\(+=._-]{6,}$", username.toLowerCase());
+           boolean testUsername = Pattern.matches("^[a-åA-Å0-9)]{6,}$", username.toLowerCase());
             if( testUsername != true){
                 checker.addProperty("msg", "Invalid Username: Must not contain any foreign characters");
                 return Response.ok(new Gson().toJson(checker)).build();

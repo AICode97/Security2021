@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import security.errorhandling.AuthenticationException;
 import errorhandling.GenericExceptionMapper;
+import java.util.regex.Pattern;
 import javax.persistence.EntityManagerFactory;
 import utils.EMF_Creator;
 
@@ -41,7 +42,14 @@ public class LoginEndpoint {
     JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
-
+    
+    JsonObject checker = new JsonObject();
+    
+    boolean testUsername = Pattern.matches("^[a-åA-Å0-9]{6,}$", username.toLowerCase());
+            if( testUsername != true){
+                checker.addProperty("msg", "Invalid Username: Must not contain any foreign characters");
+                return Response.ok(new Gson().toJson(checker)).build();
+            }
     try {
       User user = USER_FACADE.getVerifiedUser(username, password);
       String token = createToken(username, user.getRolesAsStrings());
@@ -49,6 +57,8 @@ public class LoginEndpoint {
       responseJson.addProperty("username", username);
       responseJson.addProperty("token", token);
       return Response.ok(new Gson().toJson(responseJson)).build();
+      
+      
 
     } catch (JOSEException | AuthenticationException ex) {
       if (ex instanceof AuthenticationException) {
