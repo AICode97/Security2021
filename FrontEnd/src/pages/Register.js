@@ -18,6 +18,7 @@ const userService = new UserService()
 const commonPasswordService = new CommonPasswordService()
 
 
+
 // Den tjekker at det som du har tastet ind er en gyldig email. Dette kan dog bypasses, bedste løsning ville være at sende en email til personen.
 function validateEmail(email) {
     const re = /^[a-åA-Å-0-9@.]*$/;
@@ -35,6 +36,7 @@ export default function Register(props) {
     const [error, setError] = useState("")
     const [isRegistered, setIsRegistered] = useState(false)
     const [words, setWords] = useState([])
+    const [isPasswordHidden, setPasswordHidden] = useState(true)
 
     const isDisabled = data.password.length < 12 || data.password.length > 128 || !validateEmail(data.email) || !validateUsername(data.username) || data.email.length <= 0
 
@@ -75,6 +77,10 @@ export default function Register(props) {
         return <Redirect to='/user'/>
     }
 
+    const onChange = () => {
+        setPasswordHidden(!isPasswordHidden)
+      }
+
     return Wrap(
         <div>
             <label>
@@ -83,7 +89,8 @@ export default function Register(props) {
             </label>
             <label>
                 <p>Password:</p>
-                <input value={ data.password } placeholder="Must be 6 or more characters" onChange={ setFormData("password") } type="password" name="password"/>
+                <input value={ data.password } placeholder="Must be 12 or more characters" onChange={ setFormData("password") } type={ isPasswordHidden ? 'password' : 'text' }/>
+                <button onClick={ onChange }>{ isPasswordHidden ? 'Show' : 'Hide' } password</button>
             </label>
             <label>
                 <p>Email:</p>
